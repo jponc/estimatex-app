@@ -25,7 +25,7 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
   return (
     <View style={styles.background}>
       <Appbar style={styles.appbar}>
-        <Appbar.BackAction onPress={() => navigation.push("Login")} />
+        <Appbar.BackAction onPress={() => navigation.push("Join")} />
         <Appbar.Content title={`Room: ${id}`} subtitle={`Logged as: ${name}`} />
       </Appbar>
       <Background>

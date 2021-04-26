@@ -2,18 +2,34 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 export type RootStackParamList = {
-  Login: undefined;
+  Home: undefined;
+  Join: undefined;
+  Host: undefined;
   Room: {
     id: string;
     name: string;
   };
 };
 
-// Login
-export type LoginScreenRouteProp = RouteProp<RootStackParamList, "Login">;
-export type LoginScreenNavigationProp = StackNavigationProp<
+// Home
+export type HomeScreenRouteProp = RouteProp<RootStackParamList, "Home">;
+export type HomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  "Login"
+  "Home"
+>;
+
+// Host
+export type HostScreenRouteProp = RouteProp<RootStackParamList, "Host">;
+export type HostScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Host"
+>;
+
+// Join
+export type JoinScreenRouteProp = RouteProp<RootStackParamList, "Join">;
+export type JoinScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Join"
 >;
 
 // Room
