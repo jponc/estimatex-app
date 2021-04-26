@@ -21,7 +21,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <Background>
       <View style={styles.titleContainer}>
-        <Headline style={styles.title}>Welcome to EstimateX</Headline>
+        <Headline style={styles.title}>EstimateX</Headline>
       </View>
       <Button mode="contained" onPress={onPressHost}>
         Host
@@ -35,7 +35,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 35,
+    fontSize: 40,
   },
   titleContainer: {
     marginBottom: 80,
