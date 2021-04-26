@@ -13,10 +13,9 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [name, setName] = useState<string>("");
 
   const onPress = () => {
-    console.log("HMASDF");
     navigation.push("Room", {
-      id: "123",
-      name: "julian",
+      id: roomId,
+      name: name,
     });
   };
 
