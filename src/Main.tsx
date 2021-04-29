@@ -6,8 +6,12 @@ import { RootStackParamList } from "./types";
 import { HomeScreen } from "./screens/HomeScreen";
 import { JoinScreen } from "./screens/JoinScreen";
 import { RoomScreen } from "./screens/RoomScreen";
-import { theme } from "./core/theme";
 import { HostScreen } from "./screens/HostScreen";
+
+import { RoomContainer } from "./contexts/RoomContext";
+
+import { theme } from "./core/theme";
+import { NotificationsContainer } from "./contexts/NotificationsContext";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,12 +33,16 @@ export const Main = () => {
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer linking={linking}>
-        <Stack.Navigator initialRouteName="Home" headerMode="none">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Host" component={HostScreen} />
-          <Stack.Screen name="Join" component={JoinScreen} />
-          <Stack.Screen name="Room" component={RoomScreen} />
-        </Stack.Navigator>
+        <NotificationsContainer>
+          <RoomContainer>
+            <Stack.Navigator initialRouteName="Home" headerMode="none">
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Host" component={HostScreen} />
+              <Stack.Screen name="Join" component={JoinScreen} />
+              <Stack.Screen name="Room" component={RoomScreen} />
+            </Stack.Navigator>
+          </RoomContainer>
+        </NotificationsContainer>
       </NavigationContainer>
     </PaperProvider>
   );

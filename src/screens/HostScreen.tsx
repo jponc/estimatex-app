@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { HostScreenNavigationProp } from "../types";
 import Background from "../components/Background";
 import { StyleSheet, View } from "react-native";
 import { Appbar } from "react-native-paper";
+import { RoomContext } from "../contexts/RoomContext";
+import { NotificationsContext } from "../contexts/NotificationsContext";
 
 type Props = {
   navigation: HostScreenNavigationProp;
 };
 
 export const HostScreen: React.FC<Props> = ({ navigation }) => {
+  const { hostRoom } = useContext(RoomContext);
+  const { showMessage } = useContext(NotificationsContext);
+
   const [name, setName] = useState<string>("");
 
-  const onPress = () => {
-    // navigation.push("Room", {
-    //   id: roomId,
-    //   name: name,
-    // });
+  const onPress = async () => {
+    try {
+      const roomId = await hostRoom(name);
+      showMessage("Successfully created the room");
+      navigation.push("Room", {
+        id: roomId,
+        name: name,
+      });
+    } catch (e) {
+      showMessage(e.message);
+    }
   };
 
   return (
