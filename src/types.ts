@@ -7,7 +7,6 @@ export type RootStackParamList = {
   Host: undefined;
   Room: {
     id: string;
-    name: string;
   };
 };
 
@@ -38,3 +37,22 @@ export type RoomScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Room"
 >;
+
+
+
+export type Participant = {
+  name: string;
+  vote?: string;
+  isAdmin: boolean;
+}
+
+export type PusherParticipantJoinedData = {
+  room_id: string;
+  participant_name: string;
+}
+
+export type PusherParticipantVotedData = {
+  room_id: string;
+  participant_name: string;
+  vote: string;
+}

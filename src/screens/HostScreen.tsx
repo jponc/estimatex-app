@@ -24,7 +24,6 @@ export const HostScreen: React.FC<Props> = ({ navigation }) => {
       showMessage("Successfully created the room");
       navigation.push("Room", {
         id: roomId,
-        name: name,
       });
     } catch (e) {
       showMessage(e.message);

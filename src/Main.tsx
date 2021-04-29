@@ -5,6 +5,7 @@ import { App } from "./App";
 
 import { RoomContainer } from "./contexts/RoomContext";
 import { NotificationsContainer } from "./contexts/NotificationsContext";
+import { ParticipantsContainer } from "./contexts/ParticipantsContext";
 
 import { theme } from "./core/theme";
 
@@ -28,7 +29,9 @@ export const Main = () => {
       <NavigationContainer linking={linking}>
         <NotificationsContainer>
           <RoomContainer>
-            <App />
+            <ParticipantsContainer>
+              <App />
+            </ParticipantsContainer>
           </RoomContainer>
         </NotificationsContainer>
       </NavigationContainer>

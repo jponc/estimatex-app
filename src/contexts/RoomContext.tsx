@@ -4,18 +4,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RoomContextType = {
   roomId: string;
+  name: string;
+  accessToken: string;
   hostRoom: (name: string) => Promise<string>;
   isLoaded: boolean;
 };
 
 export const RoomContext = React.createContext<RoomContextType>({
   roomId: "",
+  name: "",
+  accessToken: "",
   hostRoom: () => Promise.resolve(""),
   isLoaded: false,
 });
 
 export const RoomContainer: React.FC = ({ children }) => {
   const [roomId, setRoomId] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -30,15 +35,24 @@ export const RoomContainer: React.FC = ({ children }) => {
   useEffect(() => {
     (async () => {
       if (accessToken !== "") {
-        await AsyncStorage.setItem("accessToken", roomId);
+        await AsyncStorage.setItem("accessToken", accessToken);
       }
     })();
   }, [accessToken]);
 
   useEffect(() => {
     (async () => {
+      if (name !== "") {
+        await AsyncStorage.setItem("name", name);
+      }
+    })();
+  }, [name]);
+
+  useEffect(() => {
+    (async () => {
       const savedRoomId = await AsyncStorage.getItem("roomId");
       const savedAccessToken = await AsyncStorage.getItem("accessToken");
+      const savedName = await AsyncStorage.getItem("name");
 
       if (savedRoomId !== null) {
         setRoomId(savedRoomId);
@@ -46,6 +60,10 @@ export const RoomContainer: React.FC = ({ children }) => {
 
       if (savedAccessToken !== null) {
         setAccessToken(savedAccessToken);
+      }
+
+      if (savedName !== null) {
+        setName(savedName);
       }
 
       setIsLoaded(true);
@@ -56,12 +74,15 @@ export const RoomContainer: React.FC = ({ children }) => {
     const res = await callHostRoom(name);
     setAccessToken(res.access_token);
     setRoomId(res.room_id);
+    setName(name);
 
     return res.room_id;
   };
 
   const contextValue = {
     roomId,
+    name,
+    accessToken,
     hostRoom,
     isLoaded,
   };
