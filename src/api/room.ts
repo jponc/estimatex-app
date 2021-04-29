@@ -21,6 +21,25 @@ export const callHostRoom = async (name: string): Promise<HostRoomResponse> => {
   return res.json();
 };
 
+export const callJoinRoom = async (roomId: string, name: string): Promise<HostRoomResponse> => {
+  const res = await fetch(`${baseUrl}/JoinRoom`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      "room_id": roomId,
+      name: name,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("failed to join a room");
+  }
+
+  return res.json();
+};
+
 export const callFindParticipants = async (
   accessToken: string
 ): Promise<FindParticipantsResponse> => {

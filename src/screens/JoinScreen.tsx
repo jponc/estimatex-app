@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { JoinScreenNavigationProp } from "../types";
 import Background from "../components/Background";
 import { StyleSheet, View } from "react-native";
 import { Appbar } from "react-native-paper";
+import { RoomContext } from "../contexts/RoomContext";
+import { NotificationsContext } from "../contexts/NotificationsContext";
 
 type Props = {
   navigation: JoinScreenNavigationProp;
 };
 
 export const JoinScreen: React.FC<Props> = ({ navigation }) => {
+  const { joinRoom } = useContext(RoomContext);
   const [roomId, setRoomId] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const { showMessage } = useContext(NotificationsContext);
 
-  const onPress = () => {
-    navigation.push("Room", {
-      id: roomId,
-      name: name,
-    });
+  const onPress = async () => {
+    try {
+      const rId = await joinRoom(roomId, name);
+      showMessage("Successfully joined the room");
+      navigation.push("Room", {
+        id: rId,
+      });
+    } catch (e) {
+      showMessage(e.message);
+    }
   };
 
   return (

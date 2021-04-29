@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { callHostRoom } from "../api/room";
+import { callHostRoom, callJoinRoom } from "../api/room";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RoomContextType = {
@@ -7,6 +7,7 @@ type RoomContextType = {
   name: string;
   accessToken: string;
   hostRoom: (name: string) => Promise<string>;
+  joinRoom: (roomId: string, name: string) => Promise<string>
   isLoaded: boolean;
 };
 
@@ -15,6 +16,7 @@ export const RoomContext = React.createContext<RoomContextType>({
   name: "",
   accessToken: "",
   hostRoom: () => Promise.resolve(""),
+  joinRoom: () => Promise.resolve(""),
   isLoaded: false,
 });
 
@@ -79,11 +81,21 @@ export const RoomContainer: React.FC = ({ children }) => {
     return res.room_id;
   };
 
+  const joinRoom = async (roomId: string, name: string): Promise<string> => {
+    const res = await callJoinRoom(roomId, name);
+    setAccessToken(res.access_token);
+    setRoomId(roomId);
+    setName(name);
+
+    return roomId;
+  };
+
   const contextValue = {
     roomId,
     name,
     accessToken,
     hostRoom,
+    joinRoom,
     isLoaded,
   };
 
