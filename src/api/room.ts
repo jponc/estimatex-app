@@ -1,7 +1,7 @@
 import { HostRoomResponse, FindParticipantsResponse } from "./types";
+import Constants from 'expo-constants';
 
-// const baseUrl = process.env.API_BASE_URL;
-const baseUrl = "https://api-staging.estimatex.io"
+const baseUrl = Constants.manifest.extra!.apiBaseURL
 
 export const callHostRoom = async (name: string): Promise<HostRoomResponse> => {
   const res = await fetch(`${baseUrl}/HostRoom`, {
