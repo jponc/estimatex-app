@@ -14,18 +14,24 @@ type Props = {
 
 export const JoinScreen: React.FC<Props> = ({ navigation }) => {
   const { joinRoom } = useContext(RoomContext);
-  const [roomId, setRoomId] = useState<string>("");
-  const [name, setName] = useState<string>("");
   const { showMessage } = useContext(NotificationsContext);
 
+  const [roomId, setRoomId] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
+
   const onPress = async () => {
+    setIsButtonLoading(true);
+
     try {
       const rId = await joinRoom(roomId, name);
       showMessage("Successfully joined the room");
+      setIsButtonLoading(false);
       navigation.push("Room", {
         id: rId,
       });
     } catch (e) {
+      setIsButtonLoading(false);
       showMessage(e.message);
     }
   };
@@ -45,9 +51,15 @@ export const JoinScreen: React.FC<Props> = ({ navigation }) => {
         <TextInput
           label="Name"
           value={name}
+          onSubmitEditing={onPress}
           onChangeText={(text) => setName(text)}
         />
-        <Button mode="contained" onPress={onPress}>
+        <Button
+          mode="contained"
+          onPress={onPress}
+          disabled={isButtonLoading}
+          loading={isButtonLoading}
+        >
           Get In!
         </Button>
       </Background>

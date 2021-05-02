@@ -14,11 +14,13 @@ export const callHostRoom = async (name: string): Promise<HostRoomResponse> => {
     }),
   });
 
+  const jsonData = await res.json();
+
   if (!res.ok) {
-    throw new Error("failed to host a room");
+    throw new Error(`Error: ${jsonData.error}`);
   }
 
-  return res.json();
+  return jsonData;
 };
 
 export const callJoinRoom = async (roomId: string, name: string): Promise<HostRoomResponse> => {
@@ -33,11 +35,13 @@ export const callJoinRoom = async (roomId: string, name: string): Promise<HostRo
     }),
   });
 
+  const jsonData = await res.json();
+
   if (!res.ok) {
-    throw new Error("failed to join a room");
+    throw new Error(`Error: ${jsonData.error}`);
   }
 
-  return res.json();
+  return jsonData;
 };
 
 export const callFindParticipants = async (

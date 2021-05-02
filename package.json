@@ -7,10 +7,10 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "predeploy:staging": "expo build:web",
-    "deploy:staging": "aws s3 sync build/ s3://staging.estimatex.io --profile julian",
+    "deploy:staging": "aws s3 sync web-build/ s3://staging.estimatex.io --profile julian",
     "postdeploy:staging": "aws cloudfront create-invalidation --distribution-id EVV019ZRCSRAA --paths '/*' --profile julian",
     "predeploy:production": "expo build:web",
-    "deploy:production": "aws s3 sync build/ s3://estimatex.io --profile julian",
+    "deploy:production": "aws s3 sync web-build/ s3://estimatex.io --profile julian",
     "postdeploy:production": "aws cloudfront create-invalidation --distribution-id EQWU3WD9VYDJN --paths '/*' --profile julian"
   },
   "dependencies": {

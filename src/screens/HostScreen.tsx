@@ -16,16 +16,21 @@ export const HostScreen: React.FC<Props> = ({ navigation }) => {
   const { hostRoom } = useContext(RoomContext);
   const { showMessage } = useContext(NotificationsContext);
 
+  const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
 
   const onPress = async () => {
+    setIsButtonLoading(true);
+
     try {
       const roomId = await hostRoom(name);
       showMessage("Successfully created the room");
+      setIsButtonLoading(false);
       navigation.push("Room", {
         id: roomId,
       });
     } catch (e) {
+      setIsButtonLoading(false);
       showMessage(e.message);
     }
   };
@@ -40,9 +45,15 @@ export const HostScreen: React.FC<Props> = ({ navigation }) => {
         <TextInput
           label="Your name"
           value={name}
+          onSubmitEditing={onPress}
           onChangeText={(text) => setName(text)}
         />
-        <Button mode="contained" onPress={onPress}>
+        <Button
+          mode="contained"
+          onPress={onPress}
+          disabled={isButtonLoading}
+          loading={isButtonLoading}
+        >
           Host a Room
         </Button>
       </Background>

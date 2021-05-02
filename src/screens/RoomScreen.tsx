@@ -75,13 +75,10 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    addParticipant(name, true);
-  }, []);
-
-  useEffect(() => {
     const pusherParticipantJoined = (data: PusherParticipantJoinedData) => {
-      console.log(`adding, current length: ${participants.length}`);
-      addParticipant(data.participant_name, false);
+      if (data.participant_name !== name) {
+        addParticipant(data.participant_name, false);
+      }
     };
 
     const pusherParticipantVoted = (data: PusherParticipantVotedData) => {
@@ -134,7 +131,7 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
     <View style={styles.background}>
       <Appbar style={styles.appbar}>
         <Appbar.BackAction onPress={() => navigation.push("Home")} />
-        <Appbar.Content title={roomId} subtitle={`Logged as: ${name}`} />
+        <Appbar.Content title={`Room ID: ${roomId}`} subtitle={`Logged as: ${name}`} />
       </Appbar>
       <Background>
         <View style={styles.participantsContainer}>
