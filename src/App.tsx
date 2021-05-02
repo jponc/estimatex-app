@@ -17,7 +17,7 @@ import { theme } from "./core/theme";
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const App = () => {
-  const { isLoaded, roomId } = useContext(RoomContext);
+  const { isLoaded } = useContext(RoomContext);
 
   if (!isLoaded) {
     return (

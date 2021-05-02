@@ -1,12 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { HostScreenNavigationProp } from "../types";
 import Background from "../components/Background";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Appbar } from "react-native-paper";
 import { RoomContext } from "../contexts/RoomContext";
 import { NotificationsContext } from "../contexts/NotificationsContext";
+import { StatusBarView } from "../components/StatusBarView";
 
 type Props = {
   navigation: HostScreenNavigationProp;
@@ -36,7 +37,7 @@ export const HostScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
+    <StatusBarView>
       <Appbar style={styles.appbar}>
         <Appbar.BackAction onPress={() => navigation.push("Home")} />
         <Appbar.Content title={`Host a room`} />
@@ -57,15 +58,11 @@ export const HostScreen: React.FC<Props> = ({ navigation }) => {
           Host a Room
         </Button>
       </Background>
-    </View>
+    </StatusBarView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    width: "100%",
-  },
   appbar: {
     top: 0,
     right: 0,

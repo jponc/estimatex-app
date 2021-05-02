@@ -3,10 +3,11 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { JoinScreenNavigationProp } from "../types";
 import Background from "../components/Background";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Appbar } from "react-native-paper";
 import { RoomContext } from "../contexts/RoomContext";
 import { NotificationsContext } from "../contexts/NotificationsContext";
+import { StatusBarView } from "../components/StatusBarView";
 
 type Props = {
   navigation: JoinScreenNavigationProp;
@@ -37,7 +38,7 @@ export const JoinScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
+    <StatusBarView>
       <Appbar style={styles.appbar}>
         <Appbar.BackAction onPress={() => navigation.push("Home")} />
         <Appbar.Content title={`Join a room`} />
@@ -63,15 +64,11 @@ export const JoinScreen: React.FC<Props> = ({ navigation }) => {
           Get In!
         </Button>
       </Background>
-    </View>
+    </StatusBarView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    width: "100%",
-  },
   appbar: {
     top: 0,
     right: 0,

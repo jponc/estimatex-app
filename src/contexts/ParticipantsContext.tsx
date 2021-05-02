@@ -70,8 +70,6 @@ export const ParticipantsContainer: React.FC = ({ children }) => {
       }
     });
 
-    console.log(newParticipants);
-
     setParticipants(newParticipants);
   }
 

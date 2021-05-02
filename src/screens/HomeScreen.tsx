@@ -35,7 +35,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 40,
+    fontSize: 30,
   },
   titleContainer: {
     marginBottom: 80,

@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Appbar, Title, Chip, Avatar } from "react-native-paper";
+import { Appbar, Chip, Avatar } from "react-native-paper";
 import AnswerOptions from "../components/AnswerOptions";
 import Background from "../components/Background";
 import Button from "../components/Button";
+import { StatusBarView } from "../components/StatusBarView";
 import {
   RoomScreenNavigationProp,
   RoomScreenRouteProp,
@@ -82,7 +83,6 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
     };
 
     const pusherParticipantVoted = (data: PusherParticipantVotedData) => {
-      console.log(data);
       setParticipantVote(data.participant_name, data.vote);
     };
 
@@ -128,7 +128,7 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
   }, [participants]);
 
   return (
-    <View style={styles.background}>
+    <StatusBarView>
       <Appbar style={styles.appbar}>
         <Appbar.BackAction onPress={() => navigation.push("Home")} />
         <Appbar.Content title={`Room ID: ${roomId}`} subtitle={`Logged as: ${name}`} />
@@ -166,15 +166,11 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
           onSelect={handleOnSelect}
         />
       </Background>
-    </View>
+    </StatusBarView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    width: "100%",
-  },
   title: {
     fontSize: 40,
   },
