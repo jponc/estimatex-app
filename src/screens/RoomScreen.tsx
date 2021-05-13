@@ -50,8 +50,8 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
     Participant | undefined
   >(undefined);
 
-  const handleOnSelect = (val: string) => {
-    if (selectedValue === undefined) {
+  const handleOnVoteSelect = (val: string) => {
+    if (!isVotesVisible) {
       setSelectedValue(val);
       castVote(val);
     }
@@ -174,7 +174,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         <AnswerOptions
           selectedValue={selectedValue}
           values={["1", "2", "3", "5", "8"]}
-          onSelect={handleOnSelect}
+          onSelect={handleOnVoteSelect}
         />
       </Background>
     </StatusBarView>
