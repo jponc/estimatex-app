@@ -11,8 +11,12 @@ export const VoteResults: React.FC<Props> = ({ votes }) => {
   const [max, setMax] = useState<number>(0);
   const [avg, setAvg] = useState<number>(0);
 
+  const fiboValues = [1, 2, 3, 5, 8];
+
   useEffect(() => {
-    const voteNumbers: number[] = Object.values(votes).map(v => parseInt(v)).filter(v => v > 0);
+    const voteNumbers: number[] = Object.values(votes)
+      .map((v) => parseInt(v))
+      .filter((v) => v > 0);
 
     if (voteNumbers.length === 0) {
       return;
@@ -23,11 +27,12 @@ export const VoteResults: React.FC<Props> = ({ votes }) => {
     const sum = voteNumbers.reduce((a, b) => a + b, 0);
     const avg = parseFloat((sum / voteNumbers.length).toFixed(2));
 
+    const fiboAvg: number = fiboValues.find((v) => v >= avg) || 0;
+
     setMin(min);
     setMax(max);
-    setAvg(avg);
+    setAvg(fiboAvg);
   }, [votes]);
-
 
   return (
     <DataTable>
