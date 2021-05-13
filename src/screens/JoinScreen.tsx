@@ -61,7 +61,7 @@ export const JoinScreen: React.FC<Props> = ({ navigation }) => {
           disabled={isButtonLoading}
           loading={isButtonLoading}
         >
-          Get In!
+          Join
         </Button>
       </Background>
     </StatusBarView>
