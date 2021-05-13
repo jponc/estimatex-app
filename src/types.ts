@@ -42,9 +42,13 @@ export type RoomScreenNavigationProp = StackNavigationProp<
 
 export type Participant = {
   name: string;
-  vote?: string;
   isAdmin: boolean;
 }
+
+export type Username = string;
+export type Vote = string;
+
+export type VotesMap = Record<Username, Vote>;
 
 export type PusherParticipantJoinedData = {
   room_id: string;

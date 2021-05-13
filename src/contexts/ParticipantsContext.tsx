@@ -1,7 +1,11 @@
 import React, { useState, useContext } from "react";
 import { RoomContext } from "./RoomContext";
-import { Participant } from "../types";
+import { Participant, VotesMap, Username } from "../types";
 import { callFindParticipants, callCastVote, callResetVotes, callRevealVotes } from "../api/room";
+import { useInterval } from "../hooks/useInterval";
+
+const VOTES_QUEUE_PROCESS_INTERVAL_MILLISECONDS = 2000;
+const PARTICIPANTS_QUEUE_PROCESS_INTERVAL_MILLISECONDS = 2000;
 
 type ParticipantsContextType = {
   participants: Participant[];
@@ -12,6 +16,7 @@ type ParticipantsContextType = {
   adminResetVotes: () => Promise<void>
   castVote: (vote: string) => Promise<void>
   resetVotes: () => void
+  votes: VotesMap
 };
 
 export const ParticipantsContext = React.createContext<
@@ -24,13 +29,19 @@ export const ParticipantsContext = React.createContext<
   adminRevealVotes: () => Promise.resolve(),
   adminResetVotes: () => Promise.resolve(),
   castVote: () => Promise.resolve(),
-  resetVotes: () => {}
+  resetVotes: () => {},
+  votes: {},
 });
 
 export const ParticipantsContainer: React.FC = ({ children }) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [votes, setVotes] = useState<VotesMap>({});
+
+
   const { accessToken } = useContext(RoomContext)
 
+  let votesQueue: VotesMap = {};
+  let participantsQueue: Record<Username, Participant> = {};
 
   const addParticipant = (participantName: string, isAdmin: boolean) => {
     if (participantName === "") {
@@ -39,27 +50,39 @@ export const ParticipantsContainer: React.FC = ({ children }) => {
 
     const newParticipant: Participant = {
       name: participantName,
-      vote: undefined,
       isAdmin,
     }
 
-    setParticipants([...participants, newParticipant])
+    participantsQueue[participantName] = newParticipant;
   }
 
   const setParticipantVote = (participantName: string, vote: string) => {
-    const newParticipants = participants.map((p) => {
-      if (p.name !== participantName) {
-        return p;
-      }
-
-      return {
-        ...p,
-        vote: vote,
-      }
-    });
-
-    setParticipants(newParticipants);
+    votesQueue[participantName] = vote;
   }
+
+
+  useInterval(() => {
+    if (Object.keys(participantsQueue).length === 0) {
+      return;
+    }
+
+    const newParticipants: Participant[] = Object.values(participantsQueue);
+    participantsQueue = {};
+
+    setParticipants([...participants, ...newParticipants]);
+  }, PARTICIPANTS_QUEUE_PROCESS_INTERVAL_MILLISECONDS);
+
+  useInterval(() => {
+    if (Object.keys(votesQueue).length === 0) {
+      return;
+    }
+
+    const newVotes: VotesMap = Object.assign({}, votes, votesQueue);
+    votesQueue = {};
+
+    setVotes(newVotes);
+  }, VOTES_QUEUE_PROCESS_INTERVAL_MILLISECONDS);
+
 
   const fetchParticipants = async (): Promise<void> => {
     const fetchedParticipants = await callFindParticipants(accessToken);
@@ -86,8 +109,7 @@ export const ParticipantsContainer: React.FC = ({ children }) => {
   };
 
   const resetVotes = () => {
-    const newParticipants: Participant[] = participants.map(p => ({...p, vote: undefined}))
-    setParticipants(newParticipants);
+    setVotes({});
   };
 
 
@@ -100,6 +122,7 @@ export const ParticipantsContainer: React.FC = ({ children }) => {
     adminRevealVotes,
     castVote,
     resetVotes,
+    votes,
   }
 
   return (

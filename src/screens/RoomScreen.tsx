@@ -38,6 +38,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
     adminRevealVotes,
     castVote,
     resetVotes,
+    votes,
   } = useContext(ParticipantsContext);
 
   const [isVotesVisible, setIsVotesVisible] = useState<boolean>(false);
@@ -147,7 +148,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.participantsContainer}>
           {participants.map((participant) => {
             const avatar = isVotesVisible ? (
-              <Avatar.Text size={24} label={participant.vote || "0"} />
+              <Avatar.Text size={24} label={votes[participant.name] || "0"} />
             ) : null;
 
             return (
@@ -156,7 +157,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
                 mode="outlined"
                 style={styles.participantChip}
                 avatar={avatar}
-                selected={!!participant.vote && !isVotesVisible}
+                selected={!!votes[participant.name] && !isVotesVisible}
               >
                 {participant.name}
               </Chip>
