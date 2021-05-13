@@ -14,9 +14,6 @@ export const VoteResults: React.FC<Props> = ({ votes }) => {
   useEffect(() => {
     const voteNumbers: number[] = Object.values(votes).map(v => parseInt(v)).filter(v => v > 0);
 
-    console.log(votes);
-    console.log(voteNumbers);
-
     if (voteNumbers.length === 0) {
       return;
     }

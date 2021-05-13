@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Appbar, Chip, Avatar } from "react-native-paper";
+import { Appbar, Chip, Avatar, FAB } from "react-native-paper";
 import AnswerOptions from "../components/AnswerOptions";
 import Background from "../components/Background";
-import Button from "../components/Button";
 import { StatusBarView } from "../components/StatusBarView";
 import { VoteResults } from "../components/VoteResults";
 import {
@@ -168,24 +167,26 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
             );
           })}
         </View>
-        {currentParticipant && currentParticipant.isAdmin && (
-          <View>
-            <Button mode="contained" onPress={handleOnReveal}>
-              {isVotesVisible ? "Reset" : "Reveal"}
-            </Button>
-          </View>
-        )}
         <AnswerOptions
           selectedValue={selectedValue}
           values={["1", "2", "3", "5", "8"]}
           onSelect={handleOnVoteSelect}
         />
+        {currentParticipant && currentParticipant.isAdmin && (
+          <FAB style={styles.fab} icon="" onPress={handleOnReveal} label={isVotesVisible ? "Reset" : "Reveal"} />
+        )}
       </Background>
     </StatusBarView>
   );
 };
 
 const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
   title: {
     fontSize: 40,
   },
