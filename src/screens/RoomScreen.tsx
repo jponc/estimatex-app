@@ -5,6 +5,7 @@ import AnswerOptions from "../components/AnswerOptions";
 import Background from "../components/Background";
 import Button from "../components/Button";
 import { StatusBarView } from "../components/StatusBarView";
+import { VoteResults } from "../components/VoteResults";
 import {
   RoomScreenNavigationProp,
   RoomScreenRouteProp,
@@ -145,6 +146,9 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         />
       </Appbar>
       <Background>
+        <View style={isVotesVisible ? styles.resultsContainer : styles.resultsContainerHidden}>
+          <VoteResults votes={votes} />
+        </View>
         <View style={styles.participantsContainer}>
           {participants.map((participant) => {
             const avatar = isVotesVisible ? (
@@ -194,6 +198,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 30,
     justifyContent: "center",
+  },
+  resultsContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    width: "100%",
+    marginBottom: 30,
+    backgroundColor: "white",
+  },
+  resultsContainerHidden: {
+    display: "none",
   },
   participantChip: {
     marginRight: 10,
