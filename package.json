@@ -6,10 +6,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "predeploy:staging": "expo build:web",
+    "predeploy:staging": "API_BASE_URL=https://api-staging.estimatex.io PUSHER_API_KEY=d6c13fcdb63d08397795 expo build:web",
     "deploy:staging": "aws s3 sync web-build/ s3://staging.estimatex.io --profile julian",
     "postdeploy:staging": "aws cloudfront create-invalidation --distribution-id EVV019ZRCSRAA --paths '/*' --profile julian",
-    "predeploy:production": "expo build:web",
+    "predeploy:production": "API_BASE_URL=https://api.estimatex.io PUSHER_API_KEY=0dba419855a696e5a64a expo build:web",
     "deploy:production": "aws s3 sync web-build/ s3://estimatex.io --profile julian",
     "postdeploy:production": "aws cloudfront create-invalidation --distribution-id EQWU3WD9VYDJN --paths '/*' --profile julian"
   },
