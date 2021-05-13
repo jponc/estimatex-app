@@ -150,8 +150,10 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         </View>
         <View style={styles.participantsContainer}>
           {participants.map((participant) => {
-            const avatar = isVotesVisible ? (
-              <Avatar.Text size={24} label={votes[participant.name] || "0"} />
+            const vote = votes[participant.name];
+
+            const avatar = isVotesVisible && !!vote ? (
+              <Avatar.Text size={24} label={vote} />
             ) : null;
 
             return (
