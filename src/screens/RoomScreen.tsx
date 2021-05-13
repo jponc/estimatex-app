@@ -17,13 +17,16 @@ import { ParticipantsContext } from "../contexts/ParticipantsContext";
 import { getPusher } from "../core/pusher";
 import Pusher from "pusher-js";
 import { NotificationsContext } from "../contexts/NotificationsContext";
+import { useInterval } from "../hooks/useInterval";
+
+const PARTICIPANTS_REFRESH_INTERVAL_MILLISECONDS = 30000;
 
 type Props = {
   route: RoomScreenRouteProp;
   navigation: RoomScreenNavigationProp;
 };
 
-export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
+export const RoomScreen: React.FC<Props> = ({ navigation }) => {
   const { roomId, name } = useContext(RoomContext);
   const { showMessage } = useContext(NotificationsContext);
   const {
@@ -75,6 +78,16 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
+  const refreshParticipants = async () => {
+    try {
+      await fetchParticipants();
+    } catch {
+      showMessage("Failed to fetch room participants");
+    }
+  };
+
+  useInterval(refreshParticipants, PARTICIPANTS_REFRESH_INTERVAL_MILLISECONDS);
+
   useEffect(() => {
     const pusherParticipantJoined = (data: PusherParticipantJoinedData) => {
       if (data.participant_name !== name) {
@@ -111,13 +124,7 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
   });
 
   useEffect(() => {
-    (async () => {
-      try {
-        await fetchParticipants();
-      } catch {
-        showMessage("Failed to fetch room participants");
-      }
-    })();
+    refreshParticipants();
   }, []);
 
   useEffect(() => {
@@ -131,7 +138,10 @@ export const RoomScreen: React.FC<Props> = ({ route, navigation }) => {
     <StatusBarView>
       <Appbar style={styles.appbar}>
         <Appbar.BackAction onPress={() => navigation.push("Home")} />
-        <Appbar.Content title={`Room ID: ${roomId}`} subtitle={`Logged as: ${name}`} />
+        <Appbar.Content
+          title={`Room ID: ${roomId}`}
+          subtitle={`Logged as: ${name}`}
+        />
       </Appbar>
       <Background>
         <View style={styles.participantsContainer}>

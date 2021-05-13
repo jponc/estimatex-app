@@ -1,4 +1,3 @@
-import { Platform } from "react-native";
 import Pusher from "pusher-js";
 import PusherRN from "pusher-js/react-native";
 
