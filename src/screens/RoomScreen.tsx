@@ -145,16 +145,23 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         />
       </Appbar>
       <Background>
-        <View style={isVotesVisible ? styles.resultsContainer : styles.resultsContainerHidden}>
+        <View
+          style={
+            isVotesVisible
+              ? styles.resultsContainer
+              : styles.resultsContainerHidden
+          }
+        >
           <VoteResults votes={votes} />
         </View>
         <View style={styles.participantsContainer}>
           {participants.map((participant) => {
             const vote = votes[participant.name];
 
-            const avatar = isVotesVisible && !!vote ? (
-              <Avatar.Text size={24} label={vote} />
-            ) : null;
+            const avatar =
+              isVotesVisible && !!vote ? (
+                <Avatar.Text size={24} label={vote} />
+              ) : null;
 
             return (
               <Chip
@@ -174,18 +181,23 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
           values={["1", "2", "3", "5", "8"]}
           onSelect={handleOnVoteSelect}
         />
-        {currentParticipant && currentParticipant.isAdmin && (
-          <FAB style={styles.fab} icon="" onPress={handleOnReveal} label={isVotesVisible ? "Reset" : "Reveal"} />
-        )}
       </Background>
+      {currentParticipant && currentParticipant.isAdmin && (
+        <FAB
+          style={styles.fab}
+          icon=""
+          onPress={handleOnReveal}
+          label={isVotesVisible ? "Reset" : "Reveal"}
+        />
+      )}
     </StatusBarView>
   );
 };
 
 const styles = StyleSheet.create({
   fab: {
-    position: 'absolute',
-    margin: 16,
+    position: "absolute",
+    margin: 20,
     right: 0,
     bottom: 0,
   },
@@ -206,7 +218,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexWrap: "wrap",
     flexDirection: "row",
-    width: "100%",
+    width: "90%",
     marginBottom: 30,
     backgroundColor: "white",
   },
