@@ -12,5 +12,6 @@ export type FindParticipantsResponse = {
   name: string;
   is_admin: boolean;
   created_at: string;
+  latest_vote: string;
 }[]
 

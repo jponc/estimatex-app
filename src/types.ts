@@ -43,6 +43,7 @@ export type RoomScreenNavigationProp = StackNavigationProp<
 export type Participant = {
   name: string;
   isAdmin: boolean;
+  latestVote: string;
 }
 
 export type Username = string;

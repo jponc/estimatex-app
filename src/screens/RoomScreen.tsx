@@ -4,7 +4,6 @@ import { Appbar, Chip, Avatar, FAB } from "react-native-paper";
 import AnswerOptions from "../components/AnswerOptions";
 import Background from "../components/Background";
 import { StatusBarView } from "../components/StatusBarView";
-import { VoteResults } from "../components/VoteResults";
 import {
   RoomScreenNavigationProp,
   RoomScreenRouteProp,
@@ -17,9 +16,6 @@ import { ParticipantsContext } from "../contexts/ParticipantsContext";
 import { getPusher } from "../core/pusher";
 import Pusher from "pusher-js";
 import { NotificationsContext } from "../contexts/NotificationsContext";
-import { useInterval } from "../hooks/useInterval";
-
-const PARTICIPANTS_REFRESH_INTERVAL_MILLISECONDS = 30000;
 
 type Props = {
   route: RoomScreenRouteProp;
@@ -31,14 +27,10 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
   const { showMessage } = useContext(NotificationsContext);
   const {
     participants,
-    addParticipant,
-    setParticipantVote,
-    fetchParticipants,
     adminResetVotes,
     adminRevealVotes,
+    fetchParticipants,
     castVote,
-    resetVotes,
-    votes,
   } = useContext(ParticipantsContext);
 
   const [isVotesVisible, setIsVotesVisible] = useState<boolean>(false);
@@ -60,7 +52,6 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
   const handleOnReveal = async () => {
     if (isVotesVisible) {
       try {
-        resetVotes();
         setIsVotesVisible(false);
         setSelectedValue(undefined);
 
@@ -79,25 +70,15 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  const refreshParticipants = async () => {
-    try {
-      await fetchParticipants();
-    } catch {
-      showMessage("Failed to fetch room participants");
-    }
-  };
-
-  useInterval(refreshParticipants, PARTICIPANTS_REFRESH_INTERVAL_MILLISECONDS);
-
   useEffect(() => {
     const pusherParticipantJoined = (data: PusherParticipantJoinedData) => {
       if (data.participant_name !== name) {
-        addParticipant(data.participant_name, false);
+        fetchParticipants();
       }
     };
 
     const pusherParticipantVoted = (data: PusherParticipantVotedData) => {
-      setParticipantVote(data.participant_name, data.vote);
+        fetchParticipants();
     };
 
     const pusherRevealVotes = () => {
@@ -105,7 +86,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
     };
 
     const pusherResetVotes = () => {
-      resetVotes();
+      fetchParticipants();
       setIsVotesVisible(false);
       setSelectedValue(undefined);
     };
@@ -125,10 +106,6 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   useEffect(() => {
-    refreshParticipants();
-  }, []);
-
-  useEffect(() => {
     const p = participants.find((p) => p.name === name);
     if (p) {
       setCurrentParticipant(p);
@@ -145,18 +122,9 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
         />
       </Appbar>
       <Background>
-        <View
-          style={
-            isVotesVisible
-              ? styles.resultsContainer
-              : styles.resultsContainerHidden
-          }
-        >
-          <VoteResults votes={votes} />
-        </View>
         <View style={styles.participantsContainer}>
           {participants.map((participant) => {
-            const vote = votes[participant.name];
+            const vote = participant.latestVote;
 
             const avatar =
               isVotesVisible && !!vote ? (
@@ -169,7 +137,7 @@ export const RoomScreen: React.FC<Props> = ({ navigation }) => {
                 mode="outlined"
                 style={styles.participantChip}
                 avatar={avatar}
-                selected={!!votes[participant.name] && !isVotesVisible}
+                selected={vote !== "" && !isVotesVisible}
               >
                 {participant.name}
               </Chip>
