@@ -4,7 +4,7 @@ import { Participant, VotesMap } from "../types";
 import { callFindParticipants, callCastVote, callResetVotes, callRevealVotes } from "../api/room";
 import { useInterval } from "../hooks/useInterval";
 
-const REFRESH_PARTICIPANTS_INTERVAL_MILLISECONDS = 5000;
+const REFRESH_PARTICIPANTS_INTERVAL_MILLISECONDS = 10000;
 
 type ParticipantsContextType = {
   participants: Participant[];
